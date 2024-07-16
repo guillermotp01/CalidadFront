@@ -1,0 +1,28 @@
+<app-navegacion/>
+<main class="d-flex flex-nowrap min-vh-100">
+    <div class="container">
+        <hr/>
+        <div class="alert alert-primary" role="alert">
+            <h1 class="text-center">Inicia Sesión</h1>
+        </div>
+        <hr/>
+        <form (ngSubmit)="formSubmit()" class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Nombre de Usuario</label>
+                <input required [(ngModel)]="loginData.username" type="text" class="form-control" name="username" placeholder="Nombre de Usuario">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Contraseña</label>
+                <input required [(ngModel)]="loginData.password" class="form-control" type="password" name="password" placeholder="Contraseña">
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">
+                    Iniciar Sesión
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+<app-footer/>

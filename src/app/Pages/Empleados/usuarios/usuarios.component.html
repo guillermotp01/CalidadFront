@@ -1,0 +1,130 @@
+<app-navegacion></app-navegacion>
+<div class="container my-5 min-vh-100">
+    <h3 class="text-center my-4">Usuarios</h3>
+    <hr>
+    <div class="col-md-9 w-100">
+        <ul class="row p-0">
+            <div *ngIf="usuarios.length === 0" class="col-12 text-center mt-4">
+                <i class="bi bi-x-circle" style="color: red; font-size: 60px;"></i>
+                <p class="mt-4">No hay usuarios disponibles en este momento.</p>
+            </div>
+            <div *ngFor="let usuario of usuarios" class="col-12 col-md-4">
+                <div class="mb-3 card">
+                    <div class="mx-3 card-body">
+                        <h5 class="card-title">{{ usuario.nombre }} - {{usuario.apellido}}</h5>
+                        <hr>
+                        <p class="card-text">
+                            <strong>Correo:</strong>
+                            {{ usuario.correo }}
+                        </p>
+                        <p class="card-text">
+                            <strong>Celular:</strong> 
+                            {{ usuario.celular }}
+                        </p>
+                        <p class="card-text">
+                            <strong>Dirección:</strong>
+                            {{ usuario.direccion }}
+                        </p>
+                        <p class="card-text">
+                            <strong>Tipo de Documento:</strong> 
+                            {{ usuario.tipo_documento }}
+                        </p>
+                        <p class="card-text">
+                            <strong>Nro. Documento:</strong> 
+                            {{ usuario.nro_documento }}
+                        </p>
+                        <p class="card-text">
+                            <strong>Nombre de Usuario:</strong>
+                            {{ usuario.username }}
+                        </p>
+                        <p class="card-text">
+                            <strong>Rol de Usuario:</strong> 
+                            {{ usuario.rol }}
+                        </p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-warning" (click)="modalActualizar(usuario)">
+                                <span class="text-white" style="text-decoration: none;">Editar</span>
+                            </button>
+                            <button class="btn btn-danger" (click)="modalEliminar(usuario.id)">
+                                <span class="text-white" style="text-decoration: none;">Eliminar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ul>
+    </div>
+</div>
+<app-footer></app-footer>
+
+
+<!-- MODAL PARA GUARDAR Y ACTUALIZAR -->
+<div class="modal" *ngIf="MostrarModalActualizarUsuario">
+    <div class="modal-content text">
+        <div class="modal-header">
+            <h2 *ngIf="actualizarModal">Actualizar Usuario</h2>
+            <h2 *ngIf="!actualizarModal">Guardar Usuario</h2>
+        </div>
+        <div class="modal-body">
+            <div class="forms d-flex">
+                <div class="mx-5">
+                    <div class="form-content">
+                        <label for="nombre">Nombre:</label>
+                        <input [(ngModel)]="usuario.nombre" id="nombre" name="nombre" class="form-control" />
+                    </div>
+
+                    <div class="form-content">
+                        <label for="apellido">Apellido:</label>
+                        <input [(ngModel)]="usuario.apellido" id="apellido" name="apellido" class="form-control" />
+                    </div>
+                    
+                    <div class="form-content">
+                        <label for="tipo_documento">Tipo Documento:</label>
+                        <input [(ngModel)]="usuario.tipo_documento" id="tipo_documento" name="tipo_documento" class="form-control" />
+                    </div>
+
+                    <div class="form-content">
+                        <label for="nro_documento">Nro. Documento:</label>
+                        <input [(ngModel)]="usuario.nro_documento" id="nro_documento" name="nro_documento" class="form-control" />
+                    </div>
+
+                    <div class="form-content">
+                        <label for="correo">Correo:</label>
+                        <input [(ngModel)]="usuario.correo" id="correo" name="correo" class="form-control" />
+                    </div>
+                </div>
+                <div class="mx-5">
+                    <div class="form-content">
+                        <label for="username">Nombre de Usuario:</label>
+                        <input [(ngModel)]="usuario.username" id="username" name="username" class="form-control"/>
+                    </div>
+
+                    <div class="form-content">
+                        <label for="password">Contraseña:</label>
+                        <input [(ngModel)]="usuario.password" id="password" name="password" class="form-control"/>
+                    </div>
+                    
+                    <div class="form-content">
+                        <label for="direccion">Dirección:</label>
+                        <input [(ngModel)]="usuario.direccion" id="direccion" name="direccion" class="form-control"/>
+                    </div>
+
+                    <div class="form-content">
+                        <label for="celular">Celular:</label>
+                        <input [(ngModel)]="usuario.celular" id="celular" name="celular" class="form-control" />
+                    </div>
+
+                    <div class="form-content">
+                        <label for="rol">Rol:</label>
+                        <input [(ngModel)]="usuario.rol" id="rol" name="rol" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center mt-3">
+                <button class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+                <button *ngIf="!actualizarModal" class="btn btn-primary" (click)="guardar()">Guardar</button>
+                <button *ngIf="actualizarModal" class="btn btn-primary" (click)="actualizar()">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>

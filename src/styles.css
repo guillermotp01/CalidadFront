@@ -1,0 +1,94 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body{
+    font-family: "Poppins", sans-serif;
+    font-size: 18;
+}
+
+.carrito{
+    border: 2px solid #ddd;
+    float: right;
+    font-size: 18px;
+    padding: 10px;
+}
+.montoCarrito {
+    color: black;
+    font-weight: 700;
+}
+.nosotros{
+    text-align: justify
+}
+.carrusel{
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: scroll;
+}
+.elemento{
+    flex: 1 0 auto;
+    margin: 0 1px;
+    background-color: green;
+    width: 300px;
+    height: 300px;
+}
+
+
+li {
+    
+    list-style: none;
+}
+
+.li-footer {
+    
+    list-style: none;
+    margin-left: -40px; 
+}
+
+
+a{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.cards-wrapper{
+    column-gap: 8px;
+}
+.btn-primary{
+    color: #0dcaf0;
+}
+.mas-btn {
+    position: absolute;
+    bottom: 50px;
+    right: 5px;
+    font-size: 12px;
+    padding: 2px 6px;
+}
+.menos-btn {
+    position: absolute;
+    bottom: 50px; 
+    left: 380px;
+    font-size: 12px;
+    padding: 2px 6px;
+}
+
+.delete-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.card-can {
+    position: absolute;
+    bottom: 35px;
+    right: 40px;
+    font-size: 12px;
+    padding: 2px 6px;
+    text-align: center;
+}
+
+
+.bg-primary{
+    background-color: red;
+}

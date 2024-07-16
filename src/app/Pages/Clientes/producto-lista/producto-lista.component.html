@@ -1,0 +1,72 @@
+<app-navegacion/>
+<div class="container my-5 min-vh-100">
+    <h3 class="text-center my-4">PRODUCTOS</h3>
+
+    <div class="d-flex justify-content-between">
+        <form (ngSubmit)="listarProductosPorCategoria()">
+            <div class="input-group mb-3">
+                <select class="form-select" name="desc" [(ngModel)]="categoriaSeleccionada">
+                    <option [ngValue]="null">Todos los productos</option>
+                    <option *ngFor="let categoria of categorias" [value]="categoria.id">{{ categoria.nombre }}</option>
+                </select>
+                <button class="btn btn-outline-secondary" type="submit">Listar</button>
+            </div>
+        </form>
+        <form (ngSubmit)="buscarProductos()">
+            <div class="input-group mb-3">
+                <input type="text" name="busqueda" [(ngModel)]="busqueda" class="form-control" placeholder="Ingresar nombre o descripción">
+                <button type="submit" class="btn btn-dark">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>               
+    </div>
+    <hr>
+    <div class="pagination d-flex align-items-center mb-2 justify-content-end">
+        <button class="btn btn-light" [disabled]="actualPagina === 0" (click)="CambiarPagina(actualPagina - 1)">
+            <i class="bi bi-caret-left-fill"></i>
+        </button>
+        <span class="mx-4">{{ actualPagina + 1 }}</span>
+        <button class="btn btn-light" [disabled]="listaProductos.length < cantidadProductos" (click)="CambiarPagina(actualPagina + 1)">
+            <i class="bi bi-caret-right-fill"></i>
+        </button>
+    </div>
+    <div class="col-md-9 w-100">
+        <ul class="row p-0">
+            <div *ngIf="listaProductos.length === 0" class="col-12 text-center mt-4">
+                <i class="bi bi-x-circle" style="color: red; font-size: 60px;"></i>
+                <p class="mt-4">No hay productos disponibles en este momento.</p>
+            </div>
+            <div *ngFor="let producto of listaProductos" class="col-12 col-md-4">
+                <div class="mb-3 card">
+                    <div class="mx-3 card-body">
+                        <div class="w-20 text-center">
+                            <img [src]="producto.imagen" alt="imagen del producto" width="40%">
+                        </div>
+                        <hr>
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text">{{ producto.descripcion }}</p>
+                        <div class="d-flex justify-content-between">
+                            <strong class="d-flex mt-2">S/. {{ producto.precio }}</strong>
+                            <button class="btn btn-success" (click)="mostrarDetalles(producto.id)">
+                                <span class="text-white" style="text-decoration: none;">Detalles</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ul>
+    </div>
+
+    <div class="pagination d-flex align-items-center mb-2 justify-content-end">
+        <button class="btn btn-light" [disabled]="actualPagina === 0" (click)="CambiarPagina(actualPagina - 1)">
+            <i class="bi bi-caret-left-fill"></i>
+        </button>
+        <span class="mx-4">{{ actualPagina + 1 }}</span>
+        <button class="btn btn-light" [disabled]="listaProductos.length < cantidadProductos" (click)="CambiarPagina(actualPagina + 1)">
+            <i class="bi bi-caret-right-fill"></i>
+        </button>
+    </div>
+</div>
+
+<app-footer/>

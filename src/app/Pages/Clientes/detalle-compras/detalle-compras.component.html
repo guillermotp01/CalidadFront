@@ -1,0 +1,26 @@
+<app-navegacion></app-navegacion>
+<section *ngIf="compra" class="container d-flex flex-column justify-content-center min-vh-100">
+  <div class="d-flex justify-content-between">
+    <h4>Compra Nº : {{ compra.id }}</h4>
+    <h4>Estado : {{ compra.estado }}</h4>
+  </div>
+  <section class="d-flex" style="background-color: aqua;">
+    <div *ngFor="let detalle of compra.detallesCarrito" class="d-flex flex-grow-1">
+      <div class="d-flex flex-column align-items-center justify-content-around">
+        <img class="img-fluid rounded-start" [src]="detalle.producto.imagen" alt="producto-imagen" width="60px">
+        <div>
+          <h5>{{ detalle.producto.nombre }}</h5>
+          <p>{{ detalle.producto.descripcion }}</p>
+          <p>Cantidad: {{ detalle.cantidad }}</p>
+        </div>
+      </div>
+    </div>
+  </section>  
+</section>
+
+  
+  <div *ngIf="!compra">
+    <p>Cargando detalles de la compra...</p>
+  </div>
+  
+<app-footer></app-footer>

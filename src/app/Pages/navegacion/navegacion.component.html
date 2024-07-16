@@ -1,0 +1,85 @@
+<header style="background-color: rgb(196, 195, 195)">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid">
+                <a *ngIf="RolUsuario === 'empleado'" class="navbar-brand d-flex">
+                    <h2 class="mt-2">Ecodar</h2>
+                </a>
+                <a *ngIf="RolUsuario != 'empleado'" class="navbar-brand d-flex" (click)="inicio()">
+                    <h2 class="mt-2">Ecodar</h2>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex">
+                        <li class="nav-item" *ngIf="RolUsuario != 'empleado'">
+                            <a class="nav-link" (click)="inicio()">
+                                Inicio
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="RolUsuario != 'empleado'">
+                            <a class="nav-link" (click)="nosotros()">
+                                Nosotros
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="RolUsuario != 'empleado'">
+                            <a class="nav-link" (click)="productos()">
+                                Productos
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="RolUsuario === 'empleado'">
+                            <a class="nav-link" (click)="administrarProductos()">
+                                Administrar Productos
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="RolUsuario === 'empleado'">
+                            <a class="nav-link" (click)="administrarUsuarios()">
+                                Administrar Usuarios
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="RolUsuario === 'empleado'">
+                            <a class="nav-link" (click)="administrarCompras()">
+                                Administrar Compras
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <form class="collapse navbar-collapse d-flex mx-5" role="search" (ngSubmit)="buscarProductos()" *ngIf="RolUsuario != 'empleado'">
+                    <div class="input-group">
+                        <input class="form-control" type="search" placeholder="Buscar..." aria-label="Search" [(ngModel)]="busqueda" name="busqueda">
+                        <button type="submit" class="btn btn-dark">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="collapse navbar-collapse d-flex">
+                    <div class="dropdown contenido-derecha mx-5">
+                        <div>
+                            <strong class="user-name">Bienvenido</strong>
+                        </div>
+                        <a class="etiqueta dropdown-toggle d-flex" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: black;">
+                            <span *ngIf="nombreUsuario" class="user-name">{{ nombreUsuario }}</span>
+                            <span *ngIf="!nombreUsuario" class="user-name">Inicia Sesion</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li *ngIf="!nombreUsuario"><a class="dropdown-item" (click)="formIngresar()">Inicia Sesión</a></li>
+                            <li *ngIf="!nombreUsuario"><a class="dropdown-item" (click)="formRegistro()">Regístrate</a></li>
+                            <li *ngIf="nombreUsuario && RolUsuario === 'cliente'"><a class="dropdown-item" (click)="misCompras()">Mis Compras</a></li>
+                            <li *ngIf="nombreUsuario"><a class="dropdown-item" (click)="cerrarSesion()">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+
+                    <a class="nav-link active" (click)="carrito()"  *ngIf="RolUsuario != 'empleado'">
+                        <i class="bi bi-cart3" style="font-size: 35px;"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>

@@ -1,0 +1,41 @@
+<app-navegacion/>
+<main class="min-vh-100" *ngIf="producto">
+    <div class="producto container col-md-6 mb-3 card mt-5">
+        <div class="mx-3 card-body d-flex">
+            <div class="col-sm-6 text-center">  
+                <img [src]="producto.imagen" alt="imagen del producto" class="img-fluid" height="400" width="400"/>
+            </div>
+            <div class="mx-5">
+                <div>   
+                    <h3 style="text-transform: uppercase;">{{ producto.nombre }}</h3>
+                </div>
+                <hr>
+                <div class="my-4">  
+                    Categoria :
+                    <span style="text-transform: uppercase; color: dodgerblue; font-weight: 700">{{ producto.categoria.nombre }}</span>
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <div class="my-4">
+                        Precio :
+                        <span style="color: dodgerblue; font-weight: 700">S/ {{ producto.precio }}</span>
+                    </div>
+                    <div style="float: left; margin-right: 15px;" class="col-12">
+                        Cantidad :
+                        <input #cantidadInput style="border: 1px solid dodgerblue; padding: 5px; width: 50px;" name="cant"
+                            type="number" size="4" value="1" min="1" max="10" step="1" required="required">
+                    </div>
+                    <div class="my-4">
+                        Stock :
+                        <span style="color: dodgerblue; font-weight: 700">{{ producto.stock }}</span>
+                    </div>
+                    <button (click)="agregarProductoAlCarrito(producto.id, cantidadInput.value)" class="my-4 btn btn-success" type="button">
+                        <i class="bi bi-cart4"></i>
+                        Agregar a Carrito
+                    </button>
+                    <input size="2" type="text" name="id" style="visibility:hidden" [value]="producto.id">
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<app-footer/>

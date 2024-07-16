@@ -1,0 +1,21 @@
+<app-navegacion/>
+
+<main class="min-vh-100 d-flex justify-content-center align-items-center">
+
+  <section>
+    <div class="card mb-2 my-5 solicitud-compra" style="width: 640px">
+      <div class="row g-0">
+        <div class="card-body text-center p-5">
+          <i class="bi bi-check2-circle p-5" style="font-size: 70px; color: green;"></i>
+          <h3 class="card-title text-center p-2">Hemos recibido tu solicitud de compra</h3>
+          <h5 class="card-title text-center p-5">Todos los detalles los puede revisar en el historial de compras</h5>
+          <button class="btn btn-success d-block mx-auto p-2" (click)="MisCompras()">
+            <span class="text-white" style="text-decoration: none;">Seguir la compra</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer/>

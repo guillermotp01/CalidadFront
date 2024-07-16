@@ -1,0 +1,89 @@
+<app-navegacion></app-navegacion>
+
+<main class="min-vh-100 d-flex justify-content-center">
+  <ng-container *ngIf="usuarioIngresa; else notAuthenticated">
+    <section *ngIf="carrito && carrito.length > 0 && carrito[0].detallesCarrito.length > 0">
+      <div class="container cards-wrapper">
+        <h2 class="my-4">Productos en el Carrito</h2>
+
+        <div class="d-flex" *ngFor="let carro of carrito">
+          <section>
+            <div class="card mb-3 " *ngFor="let detalle of carro.detallesCarrito" style="width: 500px;">
+              <div class="row g-0 ">
+                <div class="col-md-4 d-flex align-items-center justify-content-center">
+                  <img class="img-fluid rounded-start" [src]="detalle.producto.imagen" alt="producto-imagen" width="80%">
+                </div>
+                <div class="col-md-8 d-flex align-items-end">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ detalle.producto.nombre }}</h5>
+                    <p class="card-text">{{ detalle.producto.descripcion }}</p>
+                    <p class="card-text">Cantidad: {{ detalle.cantidad }}</p>
+                    <p class="card-text">S/.  {{ detalle.precio }}</p>
+                  </div>
+                  <button class="btn btn-danger mx-2 my-2" style="height: 40px;" (click)="eliminarProductoDelCarrito(detalle.id)">Eliminar</button>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="card mb-2 resumen-orden mx-5" style="width: 340px; height: 220px;">
+            <div class="row g-0">
+              <div class="card-body">
+                <h5 class="card-title text-center">Resumen de la orden</h5>
+                <p class="card-text">Costo de Envio: {{ carro.precioDelivery }}</p>
+                <p class="card-text">Subtotal: {{ carro.subtotal }}</p>
+                <p class="card-text">Total: {{ carro.precioTotal }}</p>
+                <button class="btn btn-success" (click)="mostrarModalPago(carro.precioTotal)">
+                  <span class="text-white" style="text-decoration: none;">Continuar</span>
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+    <div *ngIf="!carrito || carrito.length === 0 || (carrito.length > 0 && carrito[0].detallesCarrito.length === 0)" class="d-flex align-items-center flex-direction-column">
+      <div class="text-center">
+        <i class="bi bi-cart-x-fill" style="font-size: 60px; color: red;"></i>
+        <h3>No tiene productos en el carrito.</h3>
+        <p>Agrega productos a tu carrito</p>
+        <button class="btn btn-info me-2" (click)="productos()">
+          Productos
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #notAuthenticated>
+    <div class="d-flex align-items-center flex-direction-column">
+      <div class="text-center">
+        <i class="bi bi-person-fill-x" style="font-size: 60px; color: red;"></i>
+        <h4>Por favor, inicia sesión para ver tu carrito.</h4>
+        <button class="btn btn-info me-2" (click)="ingresarSesion()">
+          Ingresa
+        </button>
+        <button class="btn btn-info" (click)="registroSesion()">
+          Regístrate
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</main>
+
+<!-- Modal de pago -->
+<div class="modal" *ngIf="mostrarModalPagoFlag">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Ingresar Monto de Pago</h5>
+    </div>
+    <div class="modal-body">
+      <label for="montoPago">Monto:</label>
+      <input type="number" [(ngModel)]="montoPago" id="montoPago" class="form-control"/>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="cerrarModalPago()">Cancelar</button>
+      <button class="btn btn-primary" (click)="procesarPago()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

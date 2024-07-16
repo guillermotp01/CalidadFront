@@ -1,0 +1,154 @@
+<app-navegacion/>
+<div class="container my-5 min-vh-100">
+    <h3 class="text-center my-4">PRODUCTOS</h3>
+
+    <div class="d-flex justify-content-between">
+        <form (ngSubmit)="listarProductosPorCategoria()">
+            <div class="input-group mb-3">
+                <select class="form-select" name="desc" [(ngModel)]="categoriaSeleccionada">
+                    <option [ngValue]="null">Todos los productos</option>
+                    <option *ngFor="let categoria of categorias" [value]="categoria.id">{{ categoria.nombre }}</option>
+                </select>
+                <button class="btn btn-outline-secondary" type="submit">Listar</button>
+            </div>
+        </form>
+        <form (ngSubmit)="buscarProductos()">
+            <div class="input-group mb-3">
+                <input type="text" name="busqueda" [(ngModel)]="busqueda" class="form-control" placeholder="Ingresar nombre o descripción">
+                <button type="submit" class="btn btn-dark">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>               
+    </div>
+    <button class="btn btn-success" (click)="crearProducto()">
+        <span class="text-white" style="text-decoration: none;">Agregar Producto</span>
+    </button>
+    <hr>
+    <div class="pagination d-flex align-items-center mb-2 justify-content-end">
+        <button class="btn btn-light" [disabled]="actualPagina === 0" (click)="CambiarPagina(actualPagina - 1)">
+            <i class="bi bi-caret-left-fill"></i>
+        </button>
+        <span class="mx-4">{{ actualPagina + 1 }}</span>
+        <button class="btn btn-light" [disabled]="listaProductos.length < cantidadProductos" (click)="CambiarPagina(actualPagina + 1)">
+            <i class="bi bi-caret-right-fill"></i>
+        </button>
+    </div>
+    <div class="col-md-9 w-100">
+        <ul class="row p-0">
+            <div *ngIf="listaProductos.length === 0" class="col-12 text-center mt-4">
+                <i class="bi bi-x-circle" style="color: red; font-size: 60px;"></i>
+                <p class="mt-4">No hay productos disponibles en este momento.</p>
+            </div>
+            <div *ngFor="let producto of listaProductos" class="col-12 col-md-4">
+                <div class="mb-3 card">
+                    <div class="mx-3 card-body">
+                        <div class="w-20 text-center">
+                            <img [src]="producto.imagen" alt="imagen del producto" width="40%">
+                        </div>
+                        <hr>
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text">{{ producto.descripcion }}</p>
+                        <div class="d-flex justify-content-between">
+                            <strong class="d-flex mt-2">S/. {{ producto.precio }}</strong>
+                            <button class="btn btn-warning">
+                                <span class="text-white" style="text-decoration: none;" (click)="modalActualizar(producto)">Editar</span>
+                            </button>
+                            <button class="btn btn-danger">
+                                <span class="text-white" style="text-decoration: none;" (click)="modalEliminar(producto.id)">Eliminar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ul>
+    </div>
+    <div class="pagination d-flex align-items-center mb-2 justify-content-end">
+        <button class="btn btn-light" [disabled]="actualPagina === 0" (click)="CambiarPagina(actualPagina - 1)">
+            <i class="bi bi-caret-left-fill"></i>
+        </button>
+        <span class="mx-4">{{ actualPagina + 1 }}</span>
+        <button class="btn btn-light" [disabled]="listaProductos.length < cantidadProductos" (click)="CambiarPagina(actualPagina + 1)">
+            <i class="bi bi-caret-right-fill"></i>
+        </button>
+    </div>
+</div>
+<app-footer/>
+
+<!-- MODAL PARA GUARDAR Y ACTUALIZAR -->
+<div class="modal" *ngIf="MostrarModalActualizarProducto">
+    <div class="modal-content text">
+        <div class="modal-header">
+            <h2 *ngIf="actualizarModal">Actualizar Producto</h2>
+            <h2 *ngIf="!actualizarModal">Guardar Producto</h2>
+        </div>
+        <div class="modal-body">
+            <div class="forms d-flex">
+                <div class="mx-5">
+                    <div class="form-content">
+                        <label for="nombre">Nombre:</label>
+                        <input [(ngModel)]="producto.nombre" id="nombre" name="nombre" class="form-control" />
+                    </div>
+
+                    <div class="form-content">
+                        <label for="categoria">Categoría:</label>
+                        <select [(ngModel)]="producto.categoria" id="categoria" name="categoria" class="form-select">
+                            <option disabled selected value="selecciona">--Categoria--</option>
+                            <option *ngFor="let categoria of categorias" [ngValue]="categoria">{{ categoria.nombre }}</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-content">
+                        <label for="proveedor">Marca:</label>
+                        <select [(ngModel)]="producto.proveedor" id="proveedor" name="proveedor" class="form-select">
+                            <option disabled selected value="selecciona">--Marca--</option>
+                            <option *ngFor="let proveedor of proveedores" [ngValue]="proveedor">{{ proveedor.nombre }}</option>
+                        </select>
+                    </div>
+                    
+                </div>
+                <div class="mx-5">
+                    <div class="form-content">
+                        <label for="descripcion">Descripción:</label>
+                        <input [(ngModel)]="producto.descripcion" id="descripcion" name="descripcion" class="form-control"/>
+                    </div>
+
+                    <div class="form-content">
+                        <label for="precio">Precio:</label>
+                        <input type="number" [(ngModel)]="producto.precio" id="precio" name="precio" class="form-control"/>
+                    </div>
+                    
+                    <div class="form-content">
+                        <label for="stock">Stock:</label>
+                        <input type="number" [(ngModel)]="producto.stock" id="stock" name="stock" class="form-control"/>
+                    </div>
+
+                    <div class="form-content">
+                        <label for="imagen">Imagen Url:</label>
+                        <input type="text" [(ngModel)]="producto.imagen" id="imagen" name="imagen" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center mt-3">
+                <button class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+                <button *ngIf="!actualizarModal" class="btn btn-primary" (click)="guardar()">Guardar</button>
+                <button *ngIf="actualizarModal" class="btn btn-primary" (click)="actualizar()">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL PARA ELIMINAR -->
+<div class="modal" *ngIf="MostrarModalEliminarProducto">
+    <div class="modal-content text">
+        <div class="text-center">
+            <i class="bi bi-x-circle" style="font-size: 30px; color: red;"></i>
+            <h2>¿Deseas eliminar este Producto?</h2>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+            <a class="btn btn-danger" (click)="eliminar()">Sí</a>
+            <a class="btn btn-primary" (click)="cancelar()">No</a>
+        </div>
+    </div>
+</div>

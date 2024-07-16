@@ -1,0 +1,67 @@
+<app-navegacion/>
+<main class="d-flex flex-nowrap min-vh-100">
+    <div class="container">
+
+        <div class="alert alert-primary my-5" role="alert">
+            <h1 class="text-center">Regístrate Aquí</h1>
+        </div>
+
+        <form [formGroup]="formUsuario" class="row g-3">
+
+            <div class="col-md-6">
+                <label class="form-label">Nombres</label>
+                <input type="text" class="form-control" formControlName="nombre" placeholder="Nombre">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Apellidos</label>
+                <input type="text" class="form-control"  formControlName="apellido" placeholder="Apellido">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Tipo Documento</label>
+                <select class="form-select" formControlName="tipo_documento" >
+                    <option value="vacio">Selecciona una categoría</option>
+                    <option value="dni">DNI</option>
+                    <option value="pasaporte">Pasaporte</option>
+                    <option value="carnet de Extranjeria">Carnet de Extranjeria</option>
+                </select>                 
+            </div>
+            
+            <div class="col-md-6">
+                <label class="form-label">Número Documento</label>
+                <input type="number" class="form-control" formControlName="nro_documento" placeholder="Numero Documento">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Celular</label>
+                <input type="number" class="form-control" formControlName="celular" placeholder="Celular">
+            </div>
+
+            <div class="col-6">
+                <label class="form-label">Dirección</label>
+                <input type="text" class="form-control" formControlName="direccion" placeholder="Dirección del Usuario">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Correo</label>
+                <input type="email" class="form-control" formControlName="correo" placeholder="Email">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Nombre de Usuario</label>
+                <input type="text" class="form-control" formControlName="username" placeholder="Nombre de Usuario">
+            </div>
+            
+            <div class="col-md-6">
+                <label class="form-label">Contraseña</label>
+                <input type="password" class="form-control" formControlName="password" placeholder="Contraseña">
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary" (click)="registrarUsuario()">Registrar Usuario</button>
+            </div>
+        </form>
+    </div>     
+</main>
+<app-footer/>
