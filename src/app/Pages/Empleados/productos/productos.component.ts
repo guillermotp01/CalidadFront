@@ -40,18 +40,24 @@ export class ProductosComponent implements OnInit{
   }
 
 
-  listarProductosPaginado(): void {
-    this.productoService.listarProductosPaginado(this.actualPagina, this.cantidadProductos)
-      .subscribe(
-        response => {
-          this.listaProductos = response.content; 
-          this.totalProductos = response.totalProductos; 
-        },
-        error => {
-          console.log('Error al obtener productos paginados:', error);
+listarProductosPaginado(): void {
+  this.productoService.listarProductosPaginado(this.actualPagina, this.cantidadProductos)
+    .subscribe(
+      response => {
+        if (response && response.content) {
+          this.listaProductos = response.content;
+          this.totalProductos = response.totalProductos;
+        } else {
+          this.listaProductos = [];
+          this.totalProductos = 0;
         }
-      );
-  }
+      },
+      error => {
+        console.error('Error al obtener productos paginados:', error);
+        this.listaProductos = []; // para evitar errores en el HTML
+      }
+    );
+}
 
   cargarCategorias() {
     this.categoriaService.listar().subscribe(data => {

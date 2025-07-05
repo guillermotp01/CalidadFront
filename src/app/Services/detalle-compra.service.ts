@@ -3,6 +3,7 @@ import { Compra } from '../Models/Compra';
 import { Producto } from '../Models/Productos';
 import { appsettings } from '../Settings/appSettings';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,11 @@ export class DetalleCompraService {
 
   constructor() { }
 
-  obtenerMisCompras(){
-    return this.http.get<Compra[]>(`${this.apiUrl}/misCompras`);
-  }
+obtenerMisCompras(){
+  return this.http.get<any>(`${this.apiUrl}/misCompras`).pipe(
+    map(response => response?.content ?? [])
+  );
+}
 
   obtenerCompraPorId(id: number){
     return this.http.get<Compra>(`${this.apiUrl}/obtener/${id}`);

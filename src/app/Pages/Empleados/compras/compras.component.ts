@@ -2,16 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Compra } from '../../../Models/Compra';
 import { Router } from '@angular/router';
 import { DetalleCompraService } from '../../../Services/detalle-compra.service';
-import { CarritoService } from '../../../Services/carrito.service';
 
 @Component({
   selector: 'app-compras',
   templateUrl: './compras.component.html',
-  styleUrl: './compras.component.css'
+  styleUrls: ['./compras.component.css']
 })
-export class ComprasComponent implements OnInit{
+export class ComprasComponent implements OnInit {
   compras: Compra[] = [];
-  compra: Compra | undefined;
+  compra: Compra | null = null;
   showModalCompra: boolean = false;
 
   constructor(
@@ -23,19 +22,21 @@ export class ComprasComponent implements OnInit{
     this.listarCompras();
   }
 
-  listarCompras() {
-    this.detalleCompraService.listarTodasCompras().subscribe(
-      (data: Compra[]) => {
-        this.compras = data;
+  listarCompras(): void {
+    this.detalleCompraService.obtenerMisCompras().subscribe(
+      (data: Compra[] | null) => {
+        this.compras = data ?? []; // si es null, asigna []
         console.log('Compras obtenidas:', this.compras);
       },
       error => {
         console.error('Error al obtener las compras', error);
+        this.compras = []; // prevenir errores de renderizado
       }
     );
   }
 
-  mostrarDetalles(id: number) {
+  mostrarDetalles(id: number | undefined): void {
+    if (id == null) return;
     this.detalleCompraService.obtenerCompraPorId(id).subscribe(
       (data: Compra) => {
         this.compra = data;
@@ -43,15 +44,17 @@ export class ComprasComponent implements OnInit{
       },
       error => {
         console.error('Error al obtener los detalles de la compra', error);
+        this.compra = null;
       }
     );
   }
 
-  cerrarModal() {
+  cerrarModal(): void {
     this.showModalCompra = false;
+    this.compra = null;
   }
 
-  productos() {
+  productos(): void {
     this.router.navigate(['productos']);
   }
 }

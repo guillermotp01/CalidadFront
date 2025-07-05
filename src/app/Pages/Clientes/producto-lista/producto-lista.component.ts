@@ -36,58 +36,83 @@ export class ProductoListaComponent implements OnInit{
     this.listarCategorias();
   }
 
-  listarProductosPaginado(): void {
-    this.productoService.listarProductosPaginado(this.actualPagina, this.cantidadProductos)
-      .subscribe(
-        response => {
-          this.listaProductos = response.content; 
-          this.totalProductos = response.totalProductos; 
-        },
-        error => {
-          console.log('Error al obtener productos paginados:', error);
+listarProductosPaginado(): void {
+  this.productoService.listarProductosPaginado(this.actualPagina, this.cantidadProductos)
+    .subscribe(
+      response => {
+        // Verifica si response y response.content existen antes de asignar
+        if (response && response.content) {
+          this.listaProductos = response.content;
+          this.totalProductos = response.totalProductos ?? 0;
+        } else {
+          this.listaProductos = [];
+          this.totalProductos = 0;
         }
-      );
-  }
-
-  listarProductos() {
-    this.productoService.listar().subscribe(resp => {
-      if (resp) {
-        this.listaProductos = resp;
+      },
+      error => {
+        console.error('Error al obtener productos paginados:', error);
+        this.listaProductos = [];
+        this.totalProductos = 0;
       }
-    });
-  }
+    );
+}
 
-  listarCategorias() {
-    this.categoriaService.listar().subscribe(resp => {
-      if (resp) {
-        this.categorias = resp;
+
+listarProductos() {
+  this.productoService.listar().subscribe(
+    resp => {
+      this.listaProductos = resp || []; // ✅ Manejo seguro
+    },
+    error => {
+      console.error('Error al listar productos:', error);
+      this.listaProductos = [];
+    }
+  );
+}
+
+listarCategorias() {
+  this.categoriaService.listar().subscribe(
+    resp => {
+      this.categorias = resp || [];
+    },
+    error => {
+      console.error('Error al listar categorías:', error);
+      this.categorias = [];
+    }
+  );
+}
+
+listarProductosPorCategoria() {
+  if (this.categoriaSeleccionada === null) {
+    this.listarProductos();
+  } else {
+    this.productoService.listarPorCategoria(this.categoriaSeleccionada).subscribe(
+      resp => {
+        this.listaProductos = resp || [];
+      },
+      error => {
+        console.error('Error al listar por categoría:', error);
+        this.listaProductos = [];
       }
-    });
+    );
   }
+}
 
-  listarProductosPorCategoria() {
-    if (this.categoriaSeleccionada === null) {
-      this.listarProductos();
-    } else {
-      this.productoService.listarPorCategoria(this.categoriaSeleccionada).subscribe(resp => {
-        if (resp) {
-          this.listaProductos = resp;
-        }
-      });
-    }
+buscarProductos() {
+  if (this.busqueda.trim() !== '') {
+    this.productoService.buscar(this.busqueda).subscribe(
+      resp => {
+        this.listaProductos = resp || [];
+      },
+      error => {
+        console.error('Error en búsqueda de productos:', error);
+        this.listaProductos = [];
+      }
+    );
+  } else {
+    this.listarProductos();
   }
-
-  buscarProductos() {
-    if (this.busqueda.trim() !== '') {
-      this.productoService.buscar(this.busqueda).subscribe(resp => {
-        if (resp) {
-          this.listaProductos = resp;
-        }
-      });
-    } else {
-      this.listarProductos();
-    }
-  }
+}
 
   mostrarDetalles(id: number) {
     this.router.navigate(['productos/' + id])
