@@ -9,7 +9,7 @@ import { NavegacionComponent } from './Pages/navegacion/navegacion.component';
 import { FooterComponent } from './Pages/footer/footer.component';
 import { NosotrosComponent } from './Pages/nosotros/nosotros.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { authInterceptorProviders } from './Services/auth.interceptor';
 import { ProductosComponent } from './Pages/Empleados/productos/productos.component';
 import { ProductoListaComponent } from './Pages/Clientes/producto-lista/producto-lista.component';
@@ -47,7 +47,7 @@ import { ComprasComponent } from './Pages/Empleados/compras/compras.component';
     HttpClientModule,
     FormsModule,
   ],
-  providers: [authInterceptorProviders],
+  providers: [authInterceptorProviders, provideHttpClient(withFetch())],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

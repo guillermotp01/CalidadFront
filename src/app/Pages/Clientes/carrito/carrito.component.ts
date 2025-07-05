@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { LoginService } from '../../../Services/login.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MetodoPagoService } from '../../../Services/metodo-pago.service';
+declare var MercadoPago: any;
 
 @Component({
   selector: 'app-carrito',
@@ -17,8 +19,11 @@ export class CarritoComponent implements OnInit {
   mostrarModalPagoFlag = false;
   montoPago: number = 0;
   montoTotal: number = 0;
-  
-  constructor(private carritoService: CarritoService, private router: Router, private loginService: LoginService) { }
+    // Nuevo: guardamos el preferenceId y el estado de bricks listo
+  preferenceId: string | null = null;
+  bricksInitialized = false;
+
+  constructor(private carritoService: CarritoService, private router: Router, private loginService: LoginService, private metodoPagoService: MetodoPagoService) { }
 
   ngOnInit(): void {
     this.usuarioIngresa = this.loginService.getUser();
@@ -65,7 +70,7 @@ export class CarritoComponent implements OnInit {
 
   mostrarModalPago(montoTotal: number): void {
     this.montoTotal = montoTotal;
-    this.mostrarModalPagoFlag = true;
+    this.generarPreferencia();
   }
 
   cerrarModalPago(): void {
@@ -73,14 +78,6 @@ export class CarritoComponent implements OnInit {
     this.montoPago = 0;
   }
 
-  procesarPago(): void {
-    if (this.montoPago >= this.montoTotal) {
-      this.confirmarCompra();
-    } else {
-      Swal.fire('Error', 'El monto ingresado es insuficiente para realizar la compra.', 'error');
-    }
-    this.cerrarModalPago();
-  }
 
   confirmarCompra(): void {
     this.carritoService.confirmarCompra().subscribe({
@@ -114,4 +111,77 @@ export class CarritoComponent implements OnInit {
   productos() {
     this.router.navigate(['productos']);
   }
+
+  
+generarPreferencia() {
+  const userData = localStorage.getItem('user');
+
+  if (!userData) {
+    console.error('No hay usuario en localStorage');
+    return;
+  }
+
+  const user = JSON.parse(userData);
+  const compra = {
+    nombre: 'Compra de boletos',
+    descripcion: 'Boletos de viaje',
+    cantidadBoletos: 2,
+    precioTotal: this.montoTotal,
+    email: user.correo
+  };
+
+  this.metodoPagoService.crearPreferencia(compra).subscribe(response => {
+    console.log('Respuesta preferencia:', response);
+    
+    const initPoint = response.initPoint || response.init_point;
+
+    if (initPoint) {
+      // ✅ Redirigir en nueva pestaña
+      window.open(initPoint, '_blank');
+      
+      // O en la misma pestaña (descomenta si prefieres)
+      // window.location.href = initPoint;
+    } else {
+      console.error('Error: No se pudo obtener el init_point de la respuesta');
+    }
+  }, error => {
+    console.error('Error al crear la preferencia:', error);
+  });
+}
+
+
+  inicializarMercadoPago(preferenceId: string) {
+    // Verificar si el contenedor ya existe para evitar crear varios botones
+    const container = document.getElementById('wallet_container');
+    if (container) {
+      // Si ya existe el contenedor, no hacer nada
+      console.log('El botón de pago ya está inicializado.');
+      return;
+    }
+  
+    // Si el contenedor no existe, entonces crear el botón de pago
+    const mp = new MercadoPago('APP_USR-fe75f47f-84a5-4ed2-a0dd-64ba5604f8c5');
+    const bricksBuilder = mp.bricks();
+  
+    bricksBuilder.create('wallet', 'wallet_container', {
+      initialization: { preferenceId: preferenceId },
+      customization: { texts: { valueProp: 'Continuar con el Pago' } },
+    }).catch((error: any) => {
+      console.error('Error al inicializar Mercado Pago:', error);
+    });
+  }
+
+  /*private verificarEstadoPago() {
+    this.route.queryParams.subscribe(params => {
+      const status = params['status'];
+      if (status) {
+        Swal.fire(
+          status === 'approved' ? '¡Pago aprobado!' :
+          status === 'pending'  ? 'Pago pendiente'  : 'Pago fallido',
+          '',
+          status === 'approved' ? 'success' : 'error'
+        );
+      }
+    });
+  }*/
 }

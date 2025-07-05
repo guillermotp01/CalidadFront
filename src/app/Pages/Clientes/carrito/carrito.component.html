@@ -38,6 +38,9 @@
               </div>
             </div>
           </section>
+
+          <!-- Contenedor para el botón de pago de MercadoPago -->
+          <div *ngIf="preferenceId" id="wallet_container"></div>
         </div>
       </div>
     </section>
@@ -81,7 +84,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" (click)="cerrarModalPago()">Cancelar</button>
-      <button class="btn btn-primary" (click)="procesarPago()">Confirmar</button>
+      <button class="btn btn-primary" (click)="generarPreferencia()">Confirmar</button>
     </div>
   </div>
 </div>

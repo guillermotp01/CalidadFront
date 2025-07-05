@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { appsettings } from '../Settings/appSettings';
 import { Subject} from 'rxjs';
 import { ResponseAPI } from '../Models/ResponseAPI';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class LoginService {
   private apiUrl: string = appsettings.apiUrl + "/validar";
   public loginStatusSubject = new Subject<boolean>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) { }
 
   public generarToken(loginData: any) {
     return this.http.post<ResponseAPI>(`${this.apiUrl}/ingresar`, loginData);
@@ -49,14 +50,12 @@ export class LoginService {
     this.setUserRole(user.authorities[0].authority); // Almacenar el rol del usuario
   }
 
-  public getUser() {
-    let userStr = localStorage.getItem('user');
-    if (userStr != null) {
-      return JSON.parse(userStr);
-    } else {
-      this.logout();
-      return null;
+  getUser() {
+    if (isPlatformBrowser(this.platformId)) {
+      const userStr = localStorage.getItem('user');
+      return userStr ? JSON.parse(userStr) : null;
     }
+    return null;
   }
 
   public setUserRole(role: string) {
