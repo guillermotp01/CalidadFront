@@ -54,9 +54,9 @@
       <div class="modal-body">
         <section *ngIf="compra; else sinDetalle" class="container d-flex flex-column justify-content-center">
           <div class="d-flex justify-content-between">
-            <h5>Compra Nº : {{ compra?.id }}</h5>
-            <h5>Estado : {{ compra?.estado }}</h5>
-            <h5>Precio : {{ compra?.precioTotal }}</h5>
+            <h5>Compra Nº : {{ compra.id }}</h5>
+            <h5>Estado : {{ compra.estado }}</h5>
+            <h5>Precio : {{ compra.precioTotal }}</h5>
           </div>
           <hr>
           <h4>Productos</h4>
