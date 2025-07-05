@@ -1,3 +1,3 @@
 export const appsettings = {
-    apiUrl: 'http://localhost:8083'
+    apiUrl: 'https://ecommerce-ndfk.onrender.com'
 }
