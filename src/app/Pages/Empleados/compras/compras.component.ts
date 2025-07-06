@@ -2,15 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Compra } from '../../../Models/Compra';
 import { Router } from '@angular/router';
 import { DetalleCompraService } from '../../../Services/detalle-compra.service';
+import { CarritoService } from '../../../Services/carrito.service';
 
 @Component({
   selector: 'app-compras',
   templateUrl: './compras.component.html',
-  styleUrls: ['./compras.component.css']
+  styleUrl: './compras.component.css'
 })
-export class ComprasComponent implements OnInit {
+export class ComprasComponent implements OnInit{
   compras: Compra[] = [];
-  compra: Compra | null = null;
+  compra: Compra | undefined;
   showModalCompra: boolean = false;
 
   constructor(
@@ -22,21 +23,19 @@ export class ComprasComponent implements OnInit {
     this.listarCompras();
   }
 
-  listarCompras(): void {
-    this.detalleCompraService.obtenerMisCompras().subscribe(
-      (data: Compra[] | null) => {
-        this.compras = data ?? []; // si es null, asigna []
-        console.log('Compras obtenidas:', this.compras);
+  listarCompras() {
+    this.detalleCompraService.listarTodasCompras().subscribe(
+      (data: Compra[]) => {
+        this.compras = data;
+        console.log('Compras obtenidas empleado:', this.compras);
       },
       error => {
         console.error('Error al obtener las compras', error);
-        this.compras = []; // prevenir errores de renderizado
       }
     );
   }
 
-  mostrarDetalles(id: number | undefined): void {
-    if (id == null) return;
+  mostrarDetalles(id: number) {
     this.detalleCompraService.obtenerCompraPorId(id).subscribe(
       (data: Compra) => {
         this.compra = data;
@@ -44,17 +43,15 @@ export class ComprasComponent implements OnInit {
       },
       error => {
         console.error('Error al obtener los detalles de la compra', error);
-        this.compra = null;
       }
     );
   }
 
-  cerrarModal(): void {
+  cerrarModal() {
     this.showModalCompra = false;
-    this.compra = null;
   }
 
-  productos(): void {
+  productos() {
     this.router.navigate(['productos']);
   }
 }

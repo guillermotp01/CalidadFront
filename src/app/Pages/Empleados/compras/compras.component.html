@@ -1,7 +1,7 @@
 <app-navegacion></app-navegacion>
 
-<section class="mt-4 min-vh-100 text-center">
-  <div *ngIf="compras.length > 0; else sinCompras" class="container my-5">
+<section class="mt-4 min-vh-100 text-center ">
+  <div *ngIf="compras.length > 0" class="container my-5">
     <h2>Mis Compras</h2>
     <table class="table table-bordered">
       <thead class="thead-light">
@@ -13,10 +13,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let compra of compras ?? []">
-          <td>{{ compra?.id }}</td>
-          <td>{{ compra?.fechaCreacion | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ compra?.estado }}</td>
+        <tr *ngFor="let compra of compras">
+          <td>{{ compra.id }}</td>
+          <td>{{ compra.fechaCreacion | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ compra.estado }}</td>
           <td class="text-center">
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#detalleCompraModal" (click)="mostrarDetalles(compra.id)">
               <i class="bi bi-eye"></i>
@@ -27,23 +27,21 @@
     </table>
   </div>
 
-  <ng-template #sinCompras>
-    <div class="text-center d-flex align-items-center justify-content-center">
-      <div class="text-center">
-        <i class="bi bi-bag-x-fill" style="font-size: 60px; color: red;"></i>
-        <h3>No hay compras realizadas</h3>
-        <p>Comienza a realizar compras</p>
-        <button class="btn btn-info me-2" (click)="productos()">
-          Productos
-        </button>
-      </div>
+  <div *ngIf="compras.length === 0" class="text-center d-flex align-items-center justify-content-center">
+    <div class="text-center">
+      <i class="bi bi-bag-x-fill" style="font-size: 60px; color: red;"></i>
+      <h3>No hay compras realizadas</h3>
+      <p>Comienza a realizar compras</p>
+      <button class="btn btn-info me-2" (click)="productos()">
+        Productos
+      </button>
     </div>
-  </ng-template>
+  </div>
 </section>
 
 <app-footer></app-footer>
 
-<!-- Modal -->
+<!--modal-->
 <div class="modal fade" id="detalleCompraModal" tabindex="-1" aria-labelledby="detalleCompraModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -52,30 +50,27 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="cerrarModal()"></button>
       </div>
       <div class="modal-body">
-        <section *ngIf="compra; else sinDetalle" class="container d-flex flex-column justify-content-center">
+        <section *ngIf="compra" class="container d-flex flex-column justify-content-center">
           <div class="d-flex justify-content-between">
             <h5>Compra Nº : {{ compra.id }}</h5>
             <h5>Estado : {{ compra.estado }}</h5>
-            <h5>Precio : {{ compra.precioTotal }}</h5>
+            <h5>Precio : {{compra.precioTotal}}</h5>
           </div>
           <hr>
           <h4>Productos</h4>
           <div class="row">
-            <div *ngFor="let detalle of compra?.detallesCarrito ?? []" class="col-md-6 mb-3">
+            <div *ngFor="let detalle of compra.detallesCarrito" class="col-md-6 mb-3">
               <div class="detalle-producto d-flex flex-column align-items-center justify-content-around">
-                <img class="img-fluid rounded-start mt-2" [src]="detalle?.producto?.imagen" alt="producto-imagen" width="60px">
+                <img class="img-fluid rounded-start mt-2" [src]="detalle.producto.imagen" alt="producto-imagen" width="60px">
                 <div>
-                  <h5>{{ detalle?.producto?.nombre }}</h5>
-                  <p>{{ detalle?.producto?.descripcion }}</p>
-                  <p>Cantidad: {{ detalle?.cantidad }}</p>
+                  <h5>{{ detalle.producto.nombre }}</h5>
+                  <p>{{ detalle.producto.descripcion }}</p>
+                  <p>Cantidad: {{ detalle.cantidad }}</p>
                 </div>
               </div>
             </div>
           </div>
         </section>
-        <ng-template #sinDetalle>
-          <p class="text-muted text-center">No se pudieron cargar los detalles de la compra.</p>
-        </ng-template>
       </div>
     </div>
   </div>
