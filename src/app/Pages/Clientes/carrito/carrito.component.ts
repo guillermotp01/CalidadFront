@@ -27,7 +27,6 @@ export class CarritoComponent implements OnInit {
   constructor(private route: ActivatedRoute, private carritoService: CarritoService, private router: Router, private loginService: LoginService, private metodoPagoService: MetodoPagoService) { }
 
   ngOnInit(): void {
-    const idCompra = this.route.snapshot.paramMap.get('cod');
     this.usuarioIngresa = this.loginService.getUser();
     if (this.usuarioIngresa != null) {
       this.listarCarrito();
@@ -127,7 +126,7 @@ generarPreferencia() {
   }
 
   const user = JSON.parse(userData);
-  const compra = {
+  const compra = JSON.parse(JSON.stringify({
     nombre: "Compra Exitosa",
     descripcion: 'Productos de Ecodar',
     cantidadBoletos: 2,
@@ -139,7 +138,8 @@ generarPreferencia() {
       failure: 'https://ecommerce-pi-five.vercel.app/carrito?status=failure'
     },
     auto_return: 'approved'
-  };
+  }));
+
 
   this.metodoPagoService.crearPreferencia(compra).subscribe(response => {
     console.log('Respuesta preferencia:', response);
