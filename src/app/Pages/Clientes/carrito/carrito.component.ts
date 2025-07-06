@@ -130,6 +130,7 @@ generarPreferencia() {
   const compra = {
     nombre: "Compra Exitosa",
     descripcion: 'Productos de Ecodar',
+    cantidadBoletos: 2,
     precioTotal: this.montoTotal,
     email: user.correo,
     back_urls: {
