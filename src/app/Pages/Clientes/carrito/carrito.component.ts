@@ -88,20 +88,12 @@ export class CarritoComponent implements OnInit {
   confirmarCompra(): void {
     this.carritoService.confirmarCompra().subscribe({
       next: (response) => {
-        console.log('Compra confirmada:', response);
-        Swal.fire({
-          icon: 'success',
-          title: 'Procesando Compra',
-          timer: 4000,
-          timerProgressBar: true,
-          showConfirmButton: false
-        }).then(() => {
-          this.router.navigate(['confirmar-compra']);
-        });
+        console.log('✅ Compra confirmada en backend:', response);
+        // Opcional: redirigir a otra página después de confirmar
+        this.router.navigate(['confirmar-compra']);
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Error al confirmar la compra', error);
-        Swal.fire('Error en la compra', 'El monto es menor al precio total', 'error');
+        console.error('❌ Error al confirmar la compra:', error);
       }
     });
   }
@@ -188,7 +180,7 @@ generarPreferencia() {
     this.route.queryParams.subscribe(params => {
       
       console.log('Query params detectados:', params); 
-      
+
       const status = params['status'];
       const paymentId = params['payment_id'];
       const merchantOrderId = params['merchant_order_id'];
