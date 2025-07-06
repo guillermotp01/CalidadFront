@@ -71,6 +71,7 @@ export class CarritoComponent implements OnInit {
   mostrarModalPago(montoTotal: number): void {
     this.montoTotal = montoTotal;
     this.generarPreferencia();
+    this.confirmarCompra();
   }
 
   cerrarModalPago(): void {
