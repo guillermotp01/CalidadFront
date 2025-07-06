@@ -4,6 +4,7 @@ import { Compra } from '../../../Models/Compra';
 import { DetalleCompraService } from '../../../Services/detalle-compra.service';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-mis-compras',
   templateUrl: './mis-compras.component.html',
@@ -23,25 +24,17 @@ export class MisComprasComponent implements OnInit{
     this.listarCompras();
   }
 
-listarCompras() {
-  this.detalleCompraService.obtenerMisCompras().subscribe(
-    (data: Compra[] | null) => {
-      if (data) {
+  listarCompras() {
+    this.detalleCompraService.obtenerMisCompras().subscribe(
+      (data: Compra[]) => {
         this.compras = data;
         console.log('Compras obtenidas:', this.compras);
-      } else {
-        this.compras = [];
-        console.warn('No se recibieron compras.');
+      },
+      error => {
+        console.error('Error al obtener las compras', error);
       }
-    },
-    error => {
-      console.error('Error al obtener las compras', error);
-      this.compras = []; // Previene fallos en el renderizado
-    }
-  );
-}
-
-
+    );
+  }
 
   mostrarDetalles(id: number) {
     this.detalleCompraService.obtenerCompraPorId(id).subscribe(
