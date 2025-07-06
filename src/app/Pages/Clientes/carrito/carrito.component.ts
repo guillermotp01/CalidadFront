@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CarritoService } from '../../../Services/carrito.service';
 import { Carrito } from '../../../Models/Carrito';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { LoginService } from '../../../Services/login.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MetodoPagoService } from '../../../Services/metodo-pago.service';
+import { Compra } from '../../../Models/Compra';
 declare var MercadoPago: any;
 
 @Component({
@@ -23,13 +24,16 @@ export class CarritoComponent implements OnInit {
   preferenceId: string | null = null;
   bricksInitialized = false;
 
-  constructor(private carritoService: CarritoService, private router: Router, private loginService: LoginService, private metodoPagoService: MetodoPagoService) { }
+  constructor(private route: ActivatedRoute, private carritoService: CarritoService, private router: Router, private loginService: LoginService, private metodoPagoService: MetodoPagoService) { }
 
   ngOnInit(): void {
+    const idCompra = this.route.snapshot.paramMap.get('cod');
     this.usuarioIngresa = this.loginService.getUser();
     if (this.usuarioIngresa != null) {
       this.listarCarrito();
     }
+
+    this.verificarEstadoPago();
   }
 
   listarCarrito() {
@@ -124,11 +128,17 @@ generarPreferencia() {
 
   const user = JSON.parse(userData);
   const compra = {
-    nombre: 'Compra de boletos',
-    descripcion: 'Boletos de viaje',
-    cantidadBoletos: 2,
+    nombre: "Compra Exitosa",
+    descripcion: 'Productos de Ecodar',
+    cantidadBoletos: this,
     precioTotal: this.montoTotal,
-    email: user.correo
+    email: user.correo,
+    back_urls: {
+      success: 'https://ecommerce-pi-five.vercel.app/misCompras/success',
+      pending: 'https://ecommerce-pi-five.vercel.app/misCompras/pending',
+      failure: 'https://ecommerce-pi-five.vercel.app/misCompras/failure',
+    },
+    auto_return: 'approved'
   };
 
   this.metodoPagoService.crearPreferencia(compra).subscribe(response => {
@@ -172,17 +182,28 @@ generarPreferencia() {
     });
   }
 
-  /*private verificarEstadoPago() {
+  verificarEstadoPago() {
     this.route.queryParams.subscribe(params => {
       const status = params['status'];
+      const paymentId = params['payment_id'];
+      const merchantOrderId = params['merchant_order_id'];
+
       if (status) {
-        Swal.fire(
-          status === 'approved' ? '¡Pago aprobado!' :
-          status === 'pending'  ? 'Pago pendiente'  : 'Pago fallido',
-          '',
-          status === 'approved' ? 'success' : 'error'
-        );
+        if (status === 'approved') {
+          Swal.fire('¡Pago aprobado!', 'Gracias por tu compra', 'success');
+          this.confirmarCompra(); // Procesa la compra solo si está aprobada
+        } else if (status === 'pending') {
+          Swal.fire('Pago pendiente', 'Tu pago está en proceso de aprobación', 'info');
+        } else if (status === 'failure') {
+          Swal.fire('Pago fallido', 'No se pudo procesar el pago', 'error');
+        }
+
+        // Opcional: Limpia los parámetros de la URL para evitar repeticiones
+        this.router.navigate([], {
+          queryParams: {},
+          replaceUrl: true
+        });
       }
     });
-  }*/
+  }
 }
