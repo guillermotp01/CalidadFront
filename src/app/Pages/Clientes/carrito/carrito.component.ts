@@ -24,7 +24,9 @@ export class CarritoComponent implements OnInit {
   preferenceId: string | null = null;
   bricksInitialized = false;
 
-  constructor(private route: ActivatedRoute, private carritoService: CarritoService, private router: Router, private loginService: LoginService, private metodoPagoService: MetodoPagoService) { }
+  constructor(private route: ActivatedRoute, private carritoService: CarritoService, private router: Router, private loginService: LoginService, private metodoPagoService: MetodoPagoService) {
+    this.verificarEstadoPago();
+  }
 
   ngOnInit(): void {
     this.usuarioIngresa = this.loginService.getUser();
@@ -32,7 +34,7 @@ export class CarritoComponent implements OnInit {
       this.listarCarrito();
     }
 
-    this.verificarEstadoPago();
+    //this.verificarEstadoPago();
   }
 
   listarCarrito() {
@@ -184,6 +186,9 @@ generarPreferencia() {
 
   verificarEstadoPago() {
     this.route.queryParams.subscribe(params => {
+      
+      console.log('Query params detectados:', params); 
+      
       const status = params['status'];
       const paymentId = params['payment_id'];
       const merchantOrderId = params['merchant_order_id'];
