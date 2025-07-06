@@ -71,6 +71,10 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'misCompras/success', 
+    component: MisComprasComponent
+  },
+  {
     path: 'detallesCompra/:id',
     component: DetalleComprasComponent,
     pathMatch: 'full'

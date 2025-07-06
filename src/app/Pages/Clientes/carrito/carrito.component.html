@@ -29,8 +29,8 @@
             <div class="row g-0">
               <div class="card-body">
                 <h5 class="card-title text-center">Resumen de la orden</h5>
+                <p class="card-text">Costro de Productos: {{ carro.subtotal }}</p>
                 <p class="card-text">Costo de Envio: {{ carro.precioDelivery }}</p>
-                <p class="card-text">Subtotal: {{ carro.subtotal }}</p>
                 <p class="card-text">Total: {{ carro.precioTotal }}</p>
                 <button class="btn btn-success" (click)="mostrarModalPago(carro.precioTotal)">
                   <span class="text-white" style="text-decoration: none;">Continuar</span>
