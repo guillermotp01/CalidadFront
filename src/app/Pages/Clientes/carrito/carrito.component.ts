@@ -148,7 +148,7 @@ generarPreferencia() {
 
     if (initPoint) {
       // ✅ Redirigir en nueva pestaña
-      window.open(initPoint, '_blank');
+      window.location.href = initPoint;
       
       // O en la misma pestaña (descomenta si prefieres)
       // window.location.href = initPoint;
