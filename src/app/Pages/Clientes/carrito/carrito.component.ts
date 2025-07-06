@@ -25,7 +25,6 @@ export class CarritoComponent implements OnInit {
   bricksInitialized = false;
 
   constructor(private route: ActivatedRoute, private carritoService: CarritoService, private router: Router, private loginService: LoginService, private metodoPagoService: MetodoPagoService) {
-    this.verificarEstadoPago();
   }
 
   ngOnInit(): void {
@@ -34,7 +33,7 @@ export class CarritoComponent implements OnInit {
       this.listarCarrito();
     }
 
-    //this.verificarEstadoPago();
+    this.verificarEstadoPago();
   }
 
   listarCarrito() {
@@ -127,9 +126,9 @@ generarPreferencia() {
     precioTotal: this.montoTotal,
     email: user.correo,
     back_urls: {
-      success: 'https://ecommerce-pi-five.vercel.app/carrito?status=approved',
-      pending: 'https://ecommerce-pi-five.vercel.app/carrito?status=pending',
-      failure: 'https://ecommerce-pi-five.vercel.app/carrito?status=failure'
+      success: 'https://ecommerce-pi-five.vercel.app/carrito/success',
+      pending: 'https://ecommerce-pi-five.vercel.app/carrito/pending',
+      failure: 'https://ecommerce-pi-five.vercel.app/carrito/failure'
     },
     auto_return: 'approved'
   }));
@@ -177,30 +176,33 @@ generarPreferencia() {
   }
 
   verificarEstadoPago() {
-    this.route.queryParams.subscribe(params => {
-      
-      console.log('Query params detectados:', params); 
+    const currentPath = this.router.url;
 
-      const status = params['status'];
-      const paymentId = params['payment_id'];
-      const merchantOrderId = params['merchant_order_id'];
-
-      if (status) {
-        if (status === 'approved') {
-          Swal.fire('¡Pago aprobado!', 'Gracias por tu compra', 'success');
-          this.confirmarCompra(); // Procesa la compra solo si está aprobada
-        } else if (status === 'pending') {
-          Swal.fire('Pago pendiente', 'Tu pago está en proceso de aprobación', 'info');
-        } else if (status === 'failure') {
-          Swal.fire('Pago fallido', 'No se pudo procesar el pago', 'error');
+    if (currentPath.includes('/carrito/success')) {
+      this.carritoService.confirmarCompra().subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: '¡Compra Exitosa!',
+            text: 'Tu compra fue confirmada con éxito.',
+            confirmButtonText: 'Ir a Mis Compras'
+          }).then(() => {
+            this.router.navigate(['/misCompras']);
+          });
+        },
+        error: () => {
+          Swal.fire('Error', 'No se pudo confirmar la compra', 'error');
         }
+      });
+    }
 
-        // Opcional: Limpia los parámetros de la URL para evitar repeticiones
-        this.router.navigate([], {
-          queryParams: {},
-          replaceUrl: true
-        });
-      }
-    });
+    if (currentPath.includes('/carrito/pending')) {
+      Swal.fire('Pago pendiente', 'Tu pago está en revisión', 'info');
+    }
+
+    if (currentPath.includes('/carrito/failure')) {
+      Swal.fire('Pago fallido', 'No se pudo completar el pago', 'error');
+    }
   }
+
 }

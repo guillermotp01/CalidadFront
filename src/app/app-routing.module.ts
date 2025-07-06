@@ -71,8 +71,16 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'misCompras/success', 
-    component: MisComprasComponent
+    path: 'carrito/success',
+    component: CarritoComponent // o el componente que debe procesar la compra
+  },
+  {
+    path: 'carrito/pending',
+    component: CarritoComponent
+  },
+  {
+    path: 'carrito/failure',
+    component: CarritoComponent
   },
   {
     path: 'detallesCompra/:id',
