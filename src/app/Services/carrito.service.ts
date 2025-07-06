@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Producto } from '../Models/Productos';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { appsettings } from '../Settings/appSettings';
 import { ResponseAPI } from '../Models/ResponseAPI';
 import { Carrito } from '../Models/Carrito';
@@ -32,8 +32,15 @@ export class CarritoService {
     );
   }
 
+  /*
   confirmarCompra(): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/confirmar`, {});
+  }*/
+  
+  confirmarCompra(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post(`${this.apiUrl}/confirmar`, {}, { headers });
   }
 
   private handleError(error: HttpErrorResponse) {
