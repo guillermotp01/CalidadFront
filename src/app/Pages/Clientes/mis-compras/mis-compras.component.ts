@@ -28,7 +28,7 @@ export class MisComprasComponent implements OnInit{
     this.detalleCompraService.obtenerMisCompras().subscribe(
       (data: Compra[]) => {
         this.compras = data;
-        console.log('Compras obtenidas:', this.compras);
+        console.log('Compras obtenidas cliente:', this.compras);
       },
       error => {
         console.error('Error al obtener las compras', error);

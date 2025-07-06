@@ -1,12 +1,14 @@
-import { Carrito } from "./Carrito";
 import { DetalleCarrito } from "./DetalleCarrito";
+import { Usuario } from "./Usuario";
 
-export class Compra {
-    id: number = 0;
-    fechaCreacion: Date = new Date;
-    estado: string = "";
-    precioTotal: number = 0;
-
-    carrito: Carrito[] = [];
-    detallesCarrito: DetalleCarrito[] = [];
+export interface Compra {
+  id: number ;
+  fechaCreacion: string;
+  estado: string;
+  precioTotal: number;
+  cantidadTotal: number;
+  precioDelivery: number;
+  subtotal: number;
+  detallesCarrito: DetalleCarrito[];
+  usuario: Usuario;
 }
