@@ -75,7 +75,7 @@ export class CarritoComponent implements OnInit {
   mostrarModalPago(montoTotal: number): void {
     this.montoTotal = montoTotal;
     this.generarPreferencia();
-    this.confirmarCompra();
+    //this.confirmarCompra();
   }
 
   cerrarModalPago(): void {
@@ -130,13 +130,12 @@ generarPreferencia() {
   const compra = {
     nombre: "Compra Exitosa",
     descripcion: 'Productos de Ecodar',
-    cantidadBoletos: this,
     precioTotal: this.montoTotal,
     email: user.correo,
     back_urls: {
-      success: 'https://ecommerce-pi-five.vercel.app/misCompras/success',
-      pending: 'https://ecommerce-pi-five.vercel.app/misCompras/pending',
-      failure: 'https://ecommerce-pi-five.vercel.app/misCompras/failure',
+      success: 'https://ecommerce-pi-five.vercel.app/carrito?status=approved',
+      pending: 'https://ecommerce-pi-five.vercel.app/carrito?status=pending',
+      failure: 'https://ecommerce-pi-five.vercel.app/carrito?status=failure'
     },
     auto_return: 'approved'
   };
