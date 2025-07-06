@@ -14,9 +14,9 @@ export class DetalleCompraService {
 
   constructor() { }
 
-obtenerMisCompras(): Observable<any[]> {
-  return this.http.get<any[]>(`${this.apiUrl}/misCompras`);
-}
+  obtenerMisCompras(){
+    return this.http.get<Compra[]>(`${this.apiUrl}/misCompras`);
+  }
 
   obtenerCompraPorId(id: number){
     return this.http.get<Compra>(`${this.apiUrl}/obtener/${id}`);
